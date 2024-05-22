@@ -1,9 +1,12 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 #include <SDL.h>
+#include <SDL_image.h>
 
 class Engine {
 public:
+    Engine();
+    ~Engine();
     int Init();
     void Input(bool& game_running);
     void Render();

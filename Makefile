@@ -1,6 +1,6 @@
 CXX := g++
 CXXFLAGS := -Iinclude/SDL2
-LDFLAGS := -Llib -lmingw32 -lSDL2main -lSDL2 -static-libgcc -static-libstdc++
+LDFLAGS := -Llib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -static-libgcc -static-libstdc++
 TARGET := build/infinity_engine
 SRCS := $(wildcard *.cpp)
 OBJS := $(patsubst %.cpp,obj/%.o,$(SRCS))
