@@ -1,35 +1,25 @@
-# Compiler
-CXX = g++
+CXX := g++
+CXXFLAGS := -Iinclude/SDL2
+LDFLAGS := -Llib -lmingw32 -lSDL2main -lSDL2 -static-libgcc -static-libstdc++
+TARGET := build/infinity_engine
+SRCS := $(wildcard *.cpp)
+OBJS := $(patsubst %.cpp,obj/%.o,$(SRCS))
+OBJ_DIR := obj
+BUILD_DIR := build
 
-# Directories
-SRCDIR = src
-BUILDDIR = build
-INCDIR = include/SDL2
-LIBDIR = lib
+all: $(BUILD_DIR) $(OBJ_DIR) $(TARGET)
 
-# Compiler flags
-CXXFLAGS = -I$(INCDIR)
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
 
-# Libraries
-LIBS = -L$(LIBDIR) -lmingw32 -lSDL2main -lSDL2 -static-libgcc -static-libstdc++
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
 
-# Source files
-SOURCES = $(wildcard $(SRCDIR)/*.cpp)
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
-# Object files
-OBJECTS = $(patsubst $(SRCDIR)/%.cpp,$(BUILDDIR)/%.o,$(SOURCES))
-
-# Executable
-EXEC = $(BUILDDIR)/infinity_engine
-
-# Build rules
-all: $(EXEC)
-
-$(EXEC): $(OBJECTS)
-	$(CXX) -o $@ $^ $(LIBS)
-
-$(BUILDDIR)/%.o: $(SRCDIR)/%.cpp
+obj/%.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 clean:
-	rm -f $(BUILDDIR)/*.o $(EXEC)
+	rm -rf $(BUILD_DIR) $(OBJ_DIR)

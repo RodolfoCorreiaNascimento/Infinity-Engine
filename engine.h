@@ -4,8 +4,6 @@
 
 class Engine {
 public:
-    Engine();
-    ~Engine();
     int Init();
     void Input(bool& game_running);
     void Render();
