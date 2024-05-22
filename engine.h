@@ -1,14 +1,13 @@
 #ifndef ENGINE_H
 #define ENGINE_H
+#define SDL_MAIN_HANDLED
 #include <SDL.h>
-#include <SDL_image.h>
 
 class Engine {
 public:
     Engine();
     ~Engine();
     int Init();
-    int LoadAssets();
     void Input(bool& game_running);
     void Render();
     void SetDelay(unsigned int time);
@@ -17,16 +16,13 @@ public:
 
     SDL_Window* getWindow() const;
     SDL_Renderer* getRenderer() const;
-    SDL_Texture* getTexture() const;
 
     void setWindow(SDL_Window* window);
     void setRenderer(SDL_Renderer* renderer);
-    void setTexture(SDL_Texture* texture);
 
 private:
     SDL_Window* window;
     SDL_Renderer* renderer;
-    SDL_Texture* texture; // Adicionar a textura aqui
 };
 
 #endif

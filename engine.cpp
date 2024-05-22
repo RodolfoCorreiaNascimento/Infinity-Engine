@@ -1,33 +1,13 @@
 #include "engine.h"
 #include <iostream>
 
-Engine::Engine() : window(nullptr), renderer(nullptr), texture(nullptr) {}
-
-Engine::~Engine() {
-    if (texture) {
-        SDL_DestroyTexture(texture);
-    }
-    if (renderer) {
-        SDL_DestroyRenderer(renderer);
-    }
-    if (window) {
-        SDL_DestroyWindow(window);
-    }
-    IMG_Quit();
-    SDL_Quit();
-}
+Engine::Engine() : window(nullptr), renderer(nullptr) {}
 
 int Engine::Init() 
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
         std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
-        return 1;
-    }
-
-    if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
-        std::cerr << "Erro ao inicializar SDL_image: " << IMG_GetError() << std::endl;
-        SDL_Quit();
         return 1;
     }
 
@@ -41,32 +21,6 @@ int Engine::Init()
     if (!renderer) {
         std::cerr << "Erro ao criar renderizador: " << SDL_GetError() << std::endl;
         SDL_DestroyWindow(window);
-        return 1;
-    }
-
-    return 0;
-}
-
-int Engine::LoadAssets()
-{
-    SDL_Surface* imageSurface = IMG_Load("resources/logo.png");
-    if (!imageSurface) {
-        std::cerr << "Erro ao carregar imagem: " << IMG_GetError() << std::endl;
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        IMG_Quit();
-        SDL_Quit();
-        return 1;
-    }
-
-    texture = SDL_CreateTextureFromSurface(renderer, imageSurface);
-    SDL_FreeSurface(imageSurface);
-    if (!texture) {
-        std::cerr << "Erro ao criar textura: " << SDL_GetError() << std::endl;
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        IMG_Quit();
-        SDL_Quit();
         return 1;
     }
 
@@ -90,8 +44,6 @@ void Engine::Render()
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-
-    SDL_RenderCopy(renderer, texture, NULL, NULL);
 
     SDL_RenderPresent(renderer);
 }
@@ -121,11 +73,6 @@ SDL_Renderer *Engine::getRenderer() const
     return renderer;
 }
 
-SDL_Texture *Engine::getTexture() const
-{
-    return texture;
-}
-
 void Engine::setWindow(SDL_Window *window)
 {
     if (this->window)
@@ -142,13 +89,4 @@ void Engine::setRenderer(SDL_Renderer *renderer)
         SDL_DestroyRenderer(this->renderer);
     }
     this->renderer = renderer;
-}
-
-void Engine::setTexture(SDL_Texture *texture)
-{
-    if (this->texture)
-    {
-        SDL_DestroyTexture(this->texture);
-    }
-    this->texture = texture;
 }
