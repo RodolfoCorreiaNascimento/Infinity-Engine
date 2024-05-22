@@ -7,6 +7,7 @@ class Engine {
 public:
     Engine();
     ~Engine();
+    void LoadAssets();
     int Init();
     void Input(bool& game_running);
     void Render();
@@ -16,6 +17,7 @@ public:
 
     SDL_Window* getWindow() const;
     SDL_Renderer* getRenderer() const;
+    
 
     void setWindow(SDL_Window* window);
     void setRenderer(SDL_Renderer* renderer);
@@ -23,6 +25,7 @@ public:
 private:
     SDL_Window* window;
     SDL_Renderer* renderer;
+    SDL_Texture* texture;
 };
 
 #endif

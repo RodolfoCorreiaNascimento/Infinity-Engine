@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
 
     SDL_DestroyRenderer(engine.getRenderer());
     SDL_DestroyWindow(engine.getWindow());
+    IMG_Quit();
     SDL_Quit();
 
     return 0;
