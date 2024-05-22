@@ -2,6 +2,7 @@
 #include <iostream>
 
 Engine::Engine() : window(nullptr), renderer(nullptr) {}
+Engine::~Engine(){}
 
 int Engine::Init() 
 {
