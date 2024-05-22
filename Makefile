@@ -11,7 +11,7 @@ LIBDIR = lib
 CXXFLAGS = -I$(INCDIR)
 
 # Libraries
-LIBS = -L$(LIBDIR) -Llib -lmingw32 -lSDL2main -lSDL2 -static-libgcc -static-libstdc++
+LIBS = -L$(LIBDIR) -lmingw32 -lSDL2main -lSDL2 -static-libgcc -static-libstdc++
 
 # Source files
 SOURCES = $(wildcard $(SRCDIR)/*.cpp)

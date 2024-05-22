@@ -1,4 +1,3 @@
-#define SDL_MAIN_HANDLED
 #include "engine.h"
 #include "game.h"
 #include <iostream>
