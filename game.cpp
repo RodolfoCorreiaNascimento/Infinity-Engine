@@ -8,4 +8,5 @@ void Game::Start() {
 
 void Game::Update() {
     // Implementação da atualização do jogo pelo usuário 
+    engine.x += 1;
 }

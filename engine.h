@@ -22,6 +22,9 @@ public:
     void setWindow(SDL_Window* window);
     void setRenderer(SDL_Renderer* renderer);
 
+    int x = 0;
+    int y = 0;
+
 private:
     SDL_Window* window;
     SDL_Renderer* renderer;

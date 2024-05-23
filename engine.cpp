@@ -55,7 +55,8 @@ void Engine::Render()
     SDL_RenderClear(renderer);
 
     // Renderizar sua textura carregada
-    SDL_Rect dstRect = {0, 0, 640, 480}; // Posição e dimensões da textura na janela
+    
+    SDL_Rect dstRect = {x, y, 640, 480}; // Posição e dimensões da textura na janela
     SDL_RenderCopy(renderer, texture, nullptr, &dstRect);
 
     SDL_RenderPresent(renderer);
