@@ -1,6 +1,6 @@
 #include "game.h"
 
-Game::Game(Engine& engine) : engine(engine) {} // Inicializa a referência ao objeto Engine
+Game::Game(PlatformWindows& plaftFormWindows) : platformWindows(platformWindows) {} // Inicializa a referência ao objeto Engine
 
 void Game::Start() {
     // Implementação da inicialização do jogo pelo usuário
@@ -8,5 +8,4 @@ void Game::Start() {
 
 void Game::Update() {
     // Implementação da atualização do jogo pelo usuário 
-    engine.x += 1;
 }

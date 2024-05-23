@@ -1,16 +1,16 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "engine.h"
+#include "PlatformWindows.h"
 
 class Game {
 public:
-    Game(Engine& engine); // Construtor recebe uma referência para Engine
+    Game(PlatformWindows& platformWindows); // Construtor recebe uma referência para Engine
     void Start();
     void Update();
 
 private:
-    Engine& engine; // Membro para armazenar a referência para Engine
+    PlatformWindows& platformWindows; // Membro para armazenar a referência para Engine
 };
 
 #endif

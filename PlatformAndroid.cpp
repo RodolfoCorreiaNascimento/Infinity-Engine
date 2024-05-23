@@ -1,10 +1,10 @@
-#include "engine.h"
+#include "PlatformAndroid.h"
 #include <iostream>
 
-Engine::Engine() : window(nullptr), renderer(nullptr), texture(nullptr){}
-Engine::~Engine(){}
+PlatformAndroid::PlatformAndroid() : window(nullptr), renderer(nullptr), texture(nullptr){}
+PlatformAndroid::~PlatformAndroid(){}
 
-int Engine::Init() 
+int PlatformAndroid::Init() 
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
@@ -36,7 +36,7 @@ int Engine::Init()
     return 0;
 }
 
-void Engine::Input(bool& game_running) {
+void PlatformAndroid::Input(bool& game_running) {
     SDL_Event e;
     while (SDL_PollEvent(&e) != 0) {
         if (e.type == SDL_QUIT) {
@@ -49,7 +49,7 @@ void Engine::Input(bool& game_running) {
     }
 }
 
-void Engine::Render()
+void PlatformAndroid::Render()
 {
     SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 255);
     SDL_RenderClear(renderer);
@@ -62,7 +62,7 @@ void Engine::Render()
     SDL_RenderPresent(renderer);
 }
 
-void Engine::LoadAssets() {
+void PlatformAndroid::LoadAssets() {
     // Carregar imagens aqui
     SDL_Surface* surface = IMG_Load("C://Users//RudeB//Documents//Infinity Engine//logo.png");
     if (!surface) {
@@ -80,32 +80,40 @@ void Engine::LoadAssets() {
     this->texture = texture;
 }
 
-void Engine::SetDelay(unsigned int time)
-{
-    SDL_Delay(time);
+void PlatformAndroid::UpdateX(int value) {
+    x += value;
 }
 
-void Engine::SetBackgroundColor(Uint8 r, Uint8 g, Uint8 b, Uint8 _alpha)
-{
-    SDL_SetRenderDrawColor(renderer, r, g, b, _alpha);
+void PlatformAndroid::UpdateY(int value) {
+    y += value;
 }
 
-void Engine::DrawLine(Uint32 x1, Uint32 x2, Uint32 y1, Uint32 y2)
+void PlatformAndroid::Initialize() 
 {
-    SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+
 }
 
-SDL_Window *Engine::getWindow() const
+void PlatformAndroid::HandleEvents()
+{
+
+}
+
+void PlatformAndroid::Shutdown()
+{
+    
+}
+
+SDL_Window *PlatformAndroid::getWindow() const
 {
     return window;
 }
 
-SDL_Renderer *Engine::getRenderer() const
+SDL_Renderer *PlatformAndroid::getRenderer() const
 {
     return renderer;
 }
 
-void Engine::setWindow(SDL_Window *window)
+void PlatformAndroid::setWindow(SDL_Window *window)
 {
     if (this->window)
     {
@@ -114,7 +122,7 @@ void Engine::setWindow(SDL_Window *window)
     this->window = window;
 }
 
-void Engine::setRenderer(SDL_Renderer *renderer)
+void PlatformAndroid::setRenderer(SDL_Renderer *renderer)
 {
     if (this->renderer)
     {
