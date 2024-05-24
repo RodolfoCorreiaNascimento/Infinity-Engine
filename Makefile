@@ -1,5 +1,5 @@
 CXX := g++
-CXXFLAGS := -Iinclude/SDL2
+CXXFLAGS := -Iinclude/SDL2 -std=c++17
 LDFLAGS := -Llib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -static-libgcc -static-libstdc++
 TARGET := build/infinity_launcher
 SRCS := $(wildcard *.cpp)

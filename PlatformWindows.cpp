@@ -18,7 +18,7 @@ int PlatformWindows::Init() {
     }
 
     // Carregar a imagem do ícone
-    SDL_Surface* iconSurface = IMG_Load("C://Users//RudeB//Documents//Infinity Engine//InfinityEngine.png");
+    SDL_Surface* iconSurface = IMG_Load("C://Users//RudeB//Documents//Infinity Engine//resources//images//InfinityEngine.png");
     if (!iconSurface) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Unable to load icon image! SDL_Error: %s\n", SDL_GetError());
         return -1;
@@ -44,7 +44,6 @@ int PlatformWindows::Init() {
     }
 
     LoadAssets();
-
     return 0;
 }
 
@@ -75,7 +74,7 @@ void PlatformWindows::Render() {
 
 void PlatformWindows::LoadAssets() {
     // Carregar imagens aqui
-    SDL_Surface* surface = IMG_Load("C://Users//RudeB//Documents//Infinity Engine//RemainOnEarth.gif");
+    SDL_Surface* surface = IMG_Load("C://Users//RudeB//Documents//Infinity Engine//resources//images//RemainOnEarth.gif");
     if (!surface) {
         std::cerr << "Falha ao carregar imagem: " << IMG_GetError() << std::endl;
         return;
@@ -86,6 +85,11 @@ void PlatformWindows::LoadAssets() {
 
     // Armazenar a textura carregada
     texture = tex;
+}
+
+bool PlatformWindows::IsSupportedImageFile(const std::string& filename) {
+    std::string extension = filename.substr(filename.find_last_of(".") + 1);
+    return (extension == "bmp" || extension == "gif" || extension == "jpg" || extension == "jpeg" || extension == "png");
 }
 
 void PlatformWindows::PlaySound(const std::string& sound_file) {

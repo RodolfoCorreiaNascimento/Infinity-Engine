@@ -18,6 +18,7 @@ public:
     void PlaySound(const std::string& sound_file) override;
     void PauseSound() override;
     void StopSound() override;
+    bool IsSupportedImageFile(const std::string& filename) override;
 
     SDL_Window *getWindow() const;
     SDL_Renderer *getRenderer() const;
