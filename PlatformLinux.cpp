@@ -37,7 +37,7 @@ int PlatformLinux::Init()
     return 0;
 }
 
-void PlatformLinux::Input(bool& game_running) {
+void PlatformLinux::HandleEvents(bool& game_running) {
     SDL_Event e;
     while (SDL_PollEvent(&e) != 0) {
         if (e.type == SDL_QUIT) {
@@ -57,7 +57,7 @@ void PlatformLinux::Render()
 
     // Renderizar sua textura carregada
     
-    SDL_Rect dstRect = {x, y, 640, 480}; // Posição e dimensões da textura na janela
+    SDL_Rect dstRect = {0, 0, 640, 480}; // Posição e dimensões da textura na janela
     SDL_RenderCopy(renderer, texture, nullptr, &dstRect);
 
     SDL_RenderPresent(renderer);
@@ -81,12 +81,43 @@ void PlatformLinux::LoadAssets() {
     this->texture = texture;
 }
 
-void PlatformLinux::UpdateX(int value) {
-    x += value;
+void PlatformLinux::PlaySound(const std::string& sound_file) {
+    // Carregar arquivo de áudio como Uint8
+    SDL_AudioSpec spec;
+    Uint8 *audio_buf;
+    Uint32 audio_len;
+
+    if (SDL_LoadWAV(sound_file.c_str(), &spec, &audio_buf, &audio_len) == nullptr) {
+        std::cerr << "Falha ao carregar arquivo de áudio: " << SDL_GetError() << std::endl;
+        return;
+    }
+
+    // Abrir dispositivo de áudio
+    audio_device = SDL_OpenAudioDevice(nullptr, 0, &spec, nullptr, 0);
+    if (audio_device == 0) {
+        std::cerr << "Falha ao abrir dispositivo de áudio: " << SDL_GetError() << std::endl;
+        SDL_FreeWAV(audio_buf);
+        return;
+    }
+
+    // Enfileirar áudio para reprodução
+    SDL_QueueAudio(audio_device, audio_buf, audio_len);
+
+    // Iniciar reprodução de áudio
+    SDL_PauseAudioDevice(audio_device, 0);
+
+    // Liberação de memória
+    SDL_FreeWAV(audio_buf);
 }
 
-void PlatformLinux::UpdateY(int value) {
-    y += value;
+
+void PlatformLinux::PauseSound() {
+    SDL_PauseAudioDevice(audio_device, 1);
+}
+
+void PlatformLinux::StopSound() {
+    SDL_ClearQueuedAudio(audio_device);
+    SDL_CloseAudioDevice(audio_device);
 }
 
 void PlatformLinux::Initialize() 
@@ -94,14 +125,20 @@ void PlatformLinux::Initialize()
 
 }
 
-void PlatformLinux::HandleEvents()
-{
-
-}
-
-void PlatformLinux::Shutdown()
-{
-    
+void PlatformLinux::Shutdown() {
+    if (audio_device != 0) {
+        SDL_CloseAudioDevice(audio_device);
+    }
+    if (renderer != nullptr) {
+        SDL_DestroyRenderer(renderer);
+        renderer = nullptr;
+    }
+    if (window != nullptr) {
+        SDL_DestroyWindow(window);
+        window = nullptr;
+    }
+    IMG_Quit();
+    SDL_Quit();
 }
 
 SDL_Window *PlatformLinux::getWindow() const

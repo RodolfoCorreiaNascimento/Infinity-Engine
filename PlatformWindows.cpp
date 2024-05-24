@@ -17,6 +17,19 @@ int PlatformWindows::Init() {
         return 1;
     }
 
+    // Carregar a imagem do ícone
+    SDL_Surface* iconSurface = IMG_Load("C://Users//RudeB//Documents//Infinity Engine//InfinityEngine.png");
+    if (!iconSurface) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Unable to load icon image! SDL_Error: %s\n", SDL_GetError());
+        return -1;
+    }
+
+    // Definir o ícone da janela
+    SDL_SetWindowIcon(window, iconSurface);
+
+    // Liberar a superfície do ícone, pois ela não é mais necessária após definir o ícone
+    SDL_FreeSurface(iconSurface);
+
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if (!renderer) {
         std::cerr << "Erro ao criar renderizador: " << SDL_GetError() << std::endl;
@@ -35,7 +48,7 @@ int PlatformWindows::Init() {
     return 0;
 }
 
-void PlatformWindows::Input(bool &game_running) {
+void PlatformWindows::HandleEvents(bool &game_running) {
     SDL_Event e;
     while (SDL_PollEvent(&e) != 0) {
         if (e.type == SDL_QUIT) {
@@ -62,7 +75,7 @@ void PlatformWindows::Render() {
 
 void PlatformWindows::LoadAssets() {
     // Carregar imagens aqui
-    SDL_Surface* surface = IMG_Load("C://Users//RudeB//Documents//Infinity Engine//logo.png");
+    SDL_Surface* surface = IMG_Load("C://Users//RudeB//Documents//Infinity Engine//RemainOnEarth.gif");
     if (!surface) {
         std::cerr << "Falha ao carregar imagem: " << IMG_GetError() << std::endl;
         return;
@@ -75,17 +88,53 @@ void PlatformWindows::LoadAssets() {
     texture = tex;
 }
 
-void PlatformWindows::UpdateX(int value) {
-    x += value;
+void PlatformWindows::PlaySound(const std::string& sound_file) {
+    // Carregar arquivo de áudio como Uint8
+    SDL_AudioSpec spec;
+    Uint8 *audio_buf;
+    Uint32 audio_len;
+
+    if (SDL_LoadWAV(sound_file.c_str(), &spec, &audio_buf, &audio_len) == nullptr) {
+        std::cerr << "Falha ao carregar arquivo de áudio: " << SDL_GetError() << std::endl;
+        return;
+    }
+
+    // Abrir dispositivo de áudio
+    audio_device = SDL_OpenAudioDevice(nullptr, 0, &spec, nullptr, 0);
+    if (audio_device == 0) {
+        std::cerr << "Falha ao abrir dispositivo de áudio: " << SDL_GetError() << std::endl;
+        SDL_FreeWAV(audio_buf);
+        return;
+    }
+
+    // Enfileirar áudio para reprodução
+    SDL_QueueAudio(audio_device, audio_buf, audio_len);
+
+    // Iniciar reprodução de áudio
+    SDL_PauseAudioDevice(audio_device, 0);
+
+    // Liberação de memória
+    SDL_FreeWAV(audio_buf);
 }
 
-void PlatformWindows::UpdateY(int value) {
-    y += value;
+
+void PlatformWindows::PauseSound() {
+    SDL_PauseAudioDevice(audio_device, 1);
 }
 
-void PlatformWindows::HandleEvents(){}
+void PlatformWindows::StopSound() {
+    SDL_ClearQueuedAudio(audio_device);
+    SDL_CloseAudioDevice(audio_device);
+}
 
-void PlatformWindows::Shutdown(){}
+//void PlatformWindows::HandleEvents(bool& game_running){}
+
+void PlatformWindows::Shutdown()
+{
+    if (audio_device != 0) {
+        SDL_CloseAudioDevice(audio_device);
+    }
+}
 
 void PlatformWindows::Initialize(){}
 

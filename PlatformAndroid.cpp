@@ -36,7 +36,7 @@ int PlatformAndroid::Init()
     return 0;
 }
 
-void PlatformAndroid::Input(bool& game_running) {
+void PlatformAndroid::HandleEvents(bool& game_running) {
     SDL_Event e;
     while (SDL_PollEvent(&e) != 0) {
         if (e.type == SDL_QUIT) {
@@ -56,7 +56,7 @@ void PlatformAndroid::Render()
 
     // Renderizar sua textura carregada
     
-    SDL_Rect dstRect = {x, y, 640, 480}; // Posição e dimensões da textura na janela
+    SDL_Rect dstRect = {0, 0, 640, 480}; // Posição e dimensões da textura na janela
     SDL_RenderCopy(renderer, texture, nullptr, &dstRect);
 
     SDL_RenderPresent(renderer);
@@ -80,12 +80,43 @@ void PlatformAndroid::LoadAssets() {
     this->texture = texture;
 }
 
-void PlatformAndroid::UpdateX(int value) {
-    x += value;
+void PlatformAndroid::PlaySound(const std::string& sound_file) {
+    // Carregar arquivo de áudio como Uint8
+    SDL_AudioSpec spec;
+    Uint8 *audio_buf;
+    Uint32 audio_len;
+
+    if (SDL_LoadWAV(sound_file.c_str(), &spec, &audio_buf, &audio_len) == nullptr) {
+        std::cerr << "Falha ao carregar arquivo de áudio: " << SDL_GetError() << std::endl;
+        return;
+    }
+
+    // Abrir dispositivo de áudio
+    audio_device = SDL_OpenAudioDevice(nullptr, 0, &spec, nullptr, 0);
+    if (audio_device == 0) {
+        std::cerr << "Falha ao abrir dispositivo de áudio: " << SDL_GetError() << std::endl;
+        SDL_FreeWAV(audio_buf);
+        return;
+    }
+
+    // Enfileirar áudio para reprodução
+    SDL_QueueAudio(audio_device, audio_buf, audio_len);
+
+    // Iniciar reprodução de áudio
+    SDL_PauseAudioDevice(audio_device, 0);
+
+    // Liberação de memória
+    SDL_FreeWAV(audio_buf);
 }
 
-void PlatformAndroid::UpdateY(int value) {
-    y += value;
+
+void PlatformAndroid::PauseSound() {
+    SDL_PauseAudioDevice(audio_device, 1);
+}
+
+void PlatformAndroid::StopSound() {
+    SDL_ClearQueuedAudio(audio_device);
+    SDL_CloseAudioDevice(audio_device);
 }
 
 void PlatformAndroid::Initialize() 
@@ -93,14 +124,20 @@ void PlatformAndroid::Initialize()
 
 }
 
-void PlatformAndroid::HandleEvents()
-{
-
-}
-
-void PlatformAndroid::Shutdown()
-{
-    
+void PlatformAndroid::Shutdown() {
+    if (audio_device != 0) {
+        SDL_CloseAudioDevice(audio_device);
+    }
+    if (renderer != nullptr) {
+        SDL_DestroyRenderer(renderer);
+        renderer = nullptr;
+    }
+    if (window != nullptr) {
+        SDL_DestroyWindow(window);
+        window = nullptr;
+    }
+    IMG_Quit();
+    SDL_Quit();
 }
 
 SDL_Window *PlatformAndroid::getWindow() const

@@ -1,5 +1,5 @@
-#ifndef PLATFORMWINDOWS_H
-#define PLATFORMWINDOWS_H
+#ifndef PLATFORM_WINDOWS_H
+#define PLATFORM_WINDOWS_H
 #include "Platform.h"
 #include <SDL.h>
 #include <SDL_image.h>
@@ -12,12 +12,12 @@ public:
     void LoadAssets() override;
     int Init() override;
     void Initialize() override;
-    void Input(bool &game_running) override;
-    void HandleEvents() override;
+    void HandleEvents(bool &game_running) override;
     void Render() override;
     void Shutdown() override;
-    void UpdateX(int value) override;
-    void UpdateY(int value) override;
+    void PlaySound(const std::string& sound_file) override;
+    void PauseSound() override;
+    void StopSound() override;
 
     SDL_Window *getWindow() const;
     SDL_Renderer *getRenderer() const;
@@ -30,8 +30,8 @@ private:
     SDL_Renderer *renderer;
     SDL_Texture *texture;
 
-    int x;
-    int y;
+    SDL_AudioSpec audio_spec;
+    SDL_AudioDeviceID audio_device;
 };
 
 #endif

@@ -12,12 +12,12 @@ public:
     void LoadAssets() override;
     int Init() override;
     void Initialize() override;
-    void Input(bool &game_running) override;
-    void HandleEvents() override;
+    void HandleEvents(bool &game_running) override;
     void Render() override;
     void Shutdown() override;
-    void UpdateX(int value) override;
-    void UpdateY(int value) override;
+    void PlaySound(const std::string& sound_file) override;
+    void PauseSound() override;
+    void StopSound() override;
 
     SDL_Window *getWindow() const;
     SDL_Renderer *getRenderer() const;
@@ -25,13 +25,13 @@ public:
     void setWindow(SDL_Window *window);
     void setRenderer(SDL_Renderer *renderer);
 
-    int x = 0;
-    int y = 0;
-
 private:
     SDL_Window *window;
     SDL_Renderer *renderer;
     SDL_Texture *texture;
+
+    SDL_AudioSpec audio_spec;
+    SDL_AudioDeviceID audio_device;
 };
 
 #endif
