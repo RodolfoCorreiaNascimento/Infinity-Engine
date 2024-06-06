@@ -1,14 +1,16 @@
 // game.cpp
 #include "game.h"
 #include <SDL.h>
-Game::Game(PlatformWindows& platformWindows) : platformWindows(platformWindows) {} // Corrigido o nome do parâmetro na inicialização
 
-void Game::Start() {
+Engine::Game::Game(PlatformWindows& platformWindows) : platformWindows(platformWindows) {} // Corrigido o nome do parâmetro na inicialização
+
+void Engine::Game::Start() {
     // Implementação da inicialização do jogo pelo usuário
-    platformWindows.PlaySound("C://Users//RudeB//Documents//Infinity Engine//resources//bgm//BalambGarden.wav");
+    const std::string& file = "C://Users//RudeB//Documents//Infinity Engine//resources//bgm//BalambGarden.wav";
+    platformWindows.PlaySound(file);
 }
 
-void Game::Update() {
+void Engine::Game::Update() {
     // Implementação da atualização do jogo pelo usuário 
     
 }

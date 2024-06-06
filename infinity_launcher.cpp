@@ -2,11 +2,14 @@
 #include "game.h"
 #include <iostream>
 using namespace std;
+using namespace Engine;
 
 // Definições de pré-processador para selecionar a plataforma
 #if defined(_WIN32) || defined(_WIN64)
 #include "PlatformWindows.h"
+#include "RenderManager.h"
 #define PLATFORM PlatformWindows
+/*
 #elif defined(__linux__)
 #include "PlatformLinux.h"
 #define PLATFORM PlatformLinux
@@ -15,6 +18,7 @@ using namespace std;
 #define PLATFORM PlatformAndroid
 #else
 #error "Platform not supported"
+*/
 #endif
 
 int main(int argc, char *argv[])
